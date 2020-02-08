@@ -1,42 +1,42 @@
 package com.epam.brest;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 public class Coefficients {
 
-    private Map<Double, Double> parameters = new TreeMap<>();
+    private Map<BigDecimal, BigDecimal> parameters = new TreeMap<>();
 
     public Coefficients(List<String> stringParameters) {
 
         for (String stringParameter : stringParameters) {
             String[] strings = stringParameter.split(" ");
 
-            parameters.put(Double.parseDouble(strings[0]), Double.parseDouble(strings[1]));
+            parameters.put(new BigDecimal(strings[0]), new BigDecimal(strings[1]));
         }
     }
 
-    public Double getCoefficientByValue(Double value) {
+    public BigDecimal getCoefficientByValue(BigDecimal value) {
 
-        Double maxKey = Collections.max(parameters.entrySet(), Map.Entry.comparingByKey()).getKey();
-        Double minKey = Collections.min(parameters.entrySet(), Map.Entry.comparingByKey()).getKey();
+        BigDecimal maxKey = Collections.max(parameters.entrySet(), Map.Entry.comparingByKey()).getKey();
+        BigDecimal minKey = Collections.min(parameters.entrySet(), Map.Entry.comparingByKey()).getKey();
 
         if (parameters.containsKey(value)) {
             return parameters.get(value);
         }
-        else if (value > maxKey) {
+        else if (value.compareTo(maxKey) > 0) {
             return parameters.get(maxKey);
         }
-        else if (value < minKey) {
-            return 1.0;
+        else if (value.compareTo(minKey) < 0) {
+            return new BigDecimal("1");
         }
         else {
-            Double coefficient = 1.0;
+            BigDecimal coefficient = new BigDecimal("1");
             for(Map.Entry entry: parameters.entrySet()) {
-                if((Double)entry.getKey() < value){
-                    coefficient = (Double) entry.getValue();
+                if(value.compareTo(new BigDecimal(entry.getKey().toString())) > 0){
+                    coefficient = new BigDecimal(entry.getValue().toString());
                 }
             }
-
             return coefficient;
         }
     }

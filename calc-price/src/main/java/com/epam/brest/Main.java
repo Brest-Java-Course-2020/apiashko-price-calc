@@ -3,9 +3,9 @@ package com.epam.brest;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 public class Main {
@@ -15,12 +15,11 @@ public class Main {
         String file_path_distance = "coefficients_distance_km";
         String file_path_weight = "coefficients_weight_kg";
 
-        System.out.println("Distance : ");
-        Coefficients distance = new Coefficients(readFormFile(file_path_distance));
-        System.out.println("Weight : ");
-        Coefficients weight = new Coefficients(readFormFile(file_path_weight));
+        Coefficients distance = new Coefficients(readFromFile(file_path_distance));
 
-        Double[] enteredValues = new Double[4];
+        Coefficients weight = new Coefficients(readFromFile(file_path_weight));
+
+        BigDecimal[] enteredValues = new BigDecimal[4];
 
         Scanner scanner = new Scanner(System.in);
         String inputValue;
@@ -42,26 +41,27 @@ public class Main {
 
             if (!isExitValue(inputValue)) {
                 if (isCorrectDoubletValue(inputValue)) {
-                    enteredValues[i] = Double.parseDouble(inputValue);
+                    enteredValues[i] = new BigDecimal(inputValue);
                     i++;
                 }
             }
 
             if(i == 2) {
-                Double k = distance.getCoefficientByValue(enteredValues[0]);
-                enteredValues[1] *= k;
+                enteredValues[1] = enteredValues[1]
+                        .multiply(distance.getCoefficientByValue(enteredValues[0]));
             }
             if(i == 4){
-                Double k =  weight.getCoefficientByValue(enteredValues[2]);
-                enteredValues[3] *= k;
+                enteredValues[3] = enteredValues[3]
+                        .multiply(weight.getCoefficientByValue(enteredValues[2]));;
             }
 
             if (i == 4) {
-                double calcResult = enteredValues[0] * enteredValues[1] + enteredValues[2] * enteredValues[3];
+                BigDecimal calcResult = enteredValues[0].multiply(enteredValues[1])
+                        .add
+                                (enteredValues[2].multiply(enteredValues[3]));
                 System.out.println("Price $ " + calcResult);
                 i = 0;
             }
-
         } while (!isExitValue(inputValue));
 
         System.out.println("Finish!");
@@ -84,14 +84,15 @@ public class Main {
         return checkResult;
     }
 
-    private static List<String> readFormFile(String path) {
+    static public List<String> readFromFile(String path) {
+
         List<String> strings = new ArrayList<>();
+
         try {
             BufferedReader reader = new BufferedReader(new FileReader(path));
             String line;
             while ((line = reader.readLine()) != null) {
                 strings.add(line);
-                System.out.println(line);
             }
         } catch (IOException e) {
             e.printStackTrace();
