@@ -7,8 +7,9 @@ public class Main {
 
     public static void main(String[] args) {
 
-        String file_path_distance = "coefficients_distance_km";
-        String file_path_weight = "coefficients_weight_kg";
+        String path_to_resource = "src/main/resources";
+        String file_path_distance = path_to_resource + "/coefficients_distance_km";
+        String file_path_weight = path_to_resource + "/coefficients_weight_kg";
 
         File file = new File();
 
