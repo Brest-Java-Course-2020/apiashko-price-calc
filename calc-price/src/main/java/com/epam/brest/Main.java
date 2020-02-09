@@ -1,11 +1,6 @@
 package com.epam.brest;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -15,9 +10,11 @@ public class Main {
         String file_path_distance = "coefficients_distance_km";
         String file_path_weight = "coefficients_weight_kg";
 
-        Coefficients distance = new Coefficients(readFromFile(file_path_distance));
+        File file = new File();
 
-        Coefficients weight = new Coefficients(readFromFile(file_path_weight));
+        Coefficients distance = new Coefficients(file.readFromFile(file_path_distance));
+
+        Coefficients weight = new Coefficients(file.readFromFile(file_path_weight));
 
         BigDecimal[] enteredValues = new BigDecimal[4];
 
@@ -82,21 +79,5 @@ public class Main {
         }
 
         return checkResult;
-    }
-
-    static public List<String> readFromFile(String path) {
-
-        List<String> strings = new ArrayList<>();
-
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(path));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                strings.add(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return strings;
     }
 }
