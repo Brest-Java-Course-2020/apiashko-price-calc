@@ -1,5 +1,9 @@
 package com.epam.brest;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import java.applet.AppletContext;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Scanner;
@@ -13,7 +17,8 @@ public class Main {
         String file_path_weight = path_to_resource + "/coefficients_weight_kg";
         String file_path_price_per_one = path_to_resource + "/price_per_one_kmKg";
 
-        File file = new File();
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("application-config.xml");
+        File file  = (File) applicationContext.getBean("file");
 
         Coefficients distance = new Coefficients(file.readFromFile(file_path_distance));
 
